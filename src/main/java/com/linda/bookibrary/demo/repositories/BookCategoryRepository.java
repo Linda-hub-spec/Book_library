@@ -16,9 +16,9 @@ import java.util.Optional;
 @Repository
 public interface BookCategoryRepository extends JpaRepository<BookCategory,Long> {
 
-    @Query("SELECT b FROM Book b WHERE b.name = :name")
+    @Query("SELECT b FROM BookCategory b WHERE b.name = :name")
     Optional<BookCategory> findByName(String name);
 
-    @Query("SELECT b FROM Book b WHERE b.status = :status OR (:status IS NULL)")
+    @Query("SELECT b FROM BookCategory b WHERE b.status = :status OR (:status IS NULL)")
     Page<BookCategory> getBookCategory(BaseStatus status, Pageable paging);
 }

@@ -8,7 +8,8 @@ import com.linda.bookibrary.demo.enums.ResponseEnum;
 import com.linda.bookibrary.demo.repositories.UserRepository;
 import com.linda.bookibrary.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -17,8 +18,7 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     @Autowired
     UserRepository userRepository;
-    @Autowired
-    PasswordEncoder passwordEncoder;
+    
 
     @Override
     public BaseResponse createUser(CreateUserRequest request) {
@@ -26,6 +26,7 @@ public class UserServiceImpl implements UserService {
         Long startTime = System.currentTimeMillis();
         BaseResponse response = new BaseResponse();
 
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         try {
             //checks if user with email already exist
             Optional<User> user = userRepository.findByEmail(request.getEmail());
@@ -40,7 +41,7 @@ public class UserServiceImpl implements UserService {
             userData.setLastname(request.getLastname());
             userData.setEmail(request.getEmail());
             userData.setUserType(request.getUserType());
-            userData.setPassword(passwordEncoder.encode(request.getPassword()));
+            userData.setPassword(encoder.encode(request.getPassword()));
             userRepository.save(userData);
 
             response.setResponseCode(ResponseEnum.SUCCESSFUL.getResponseCode());
