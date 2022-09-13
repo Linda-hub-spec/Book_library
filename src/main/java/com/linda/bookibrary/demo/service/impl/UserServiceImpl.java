@@ -8,10 +8,10 @@ import com.linda.bookibrary.demo.enums.ResponseEnum;
 import com.linda.bookibrary.demo.repositories.UserRepository;
 import com.linda.bookibrary.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import org.springframework.stereotype.Service;
 
+import java.util.Base64;
 import java.util.Optional;
 
 @Service
@@ -22,11 +22,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public BaseResponse createUser(CreateUserRequest request) {
+        Base64.Encoder encoder = Base64.getEncoder();
 
         Long startTime = System.currentTimeMillis();
         BaseResponse response = new BaseResponse();
 
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         try {
             //checks if user with email already exist
             Optional<User> user = userRepository.findByEmail(request.getEmail());
@@ -41,7 +41,7 @@ public class UserServiceImpl implements UserService {
             userData.setLastname(request.getLastname());
             userData.setEmail(request.getEmail());
             userData.setUserType(request.getUserType());
-            userData.setPassword(encoder.encode(request.getPassword()));
+            userData.setPassword(encoder.encodeToString(request.getPassword().getBytes()));
             userRepository.save(userData);
 
             response.setResponseCode(ResponseEnum.SUCCESSFUL.getResponseCode());
