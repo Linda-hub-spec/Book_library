@@ -12,4 +12,4 @@ The application uses an in-memory db. To run the applicaiton:
 2.	run: mvn clean package 
 3.	run: mvn spring-boot:run
 Application runs on port: 20002
-Swagger documentation : http://localhost:20002/spring-security-oauth-resource/swagger-ui.html
+Swagger documentation : http://localhost:20002/swagger-ui.html
